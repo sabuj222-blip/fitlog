@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown, Search, Clock, Flame, Star } from "lucide-react";
 
@@ -25,9 +24,10 @@ export default function WorkoutGrid({ initialWorkouts }) {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 pb-6 border-b border-zinc-900">
+      {/* Header & Filter Controls */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 pb-6 border-b border-zinc-900/80">
         <div>
-          <h2 className="text-3xl font-extrabold uppercase tracking-wider font-mono">
+          <h2 className="text-3xl font-extrabold uppercase tracking-wider font-mono text-white">
             THE LIBRARY
           </h2>
           <p className="text-zinc-400 text-sm mt-1">
@@ -43,7 +43,7 @@ export default function WorkoutGrid({ initialWorkouts }) {
               placeholder="Search name or tag..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="bg-zinc-900 border border-zinc-800 text-white pl-9 pr-4 py-2 rounded-lg text-sm focus:outline-none focus:border-[#ccff00]"
+              className="bg-[#14161f] border border-zinc-800 text-white pl-9 pr-4 py-2 rounded-lg text-sm focus:outline-none focus:border-[#ccff00]"
             />
           </div>
 
@@ -51,7 +51,7 @@ export default function WorkoutGrid({ initialWorkouts }) {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="appearance-none bg-zinc-900 border border-zinc-800 text-white pl-4 pr-10 py-2 rounded-lg text-sm focus:outline-none focus:border-[#ccff00] cursor-pointer"
+              className="appearance-none bg-[#14161f] border border-zinc-800 text-white pl-4 pr-10 py-2 rounded-lg text-sm focus:outline-none focus:border-[#ccff00] cursor-pointer"
             >
               <option value="duration">Sort By: Duration</option>
               <option value="calories">Sort By: Calories</option>
@@ -62,49 +62,70 @@ export default function WorkoutGrid({ initialWorkouts }) {
         </div>
       </div>
 
+      {/* Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {sortedWorkouts.map((item) => (
           <Link
             key={item.id}
             href={`/workout/${item.id}`}
-            className="bg-zinc-900/80 border border-zinc-800 rounded-xl p-5 hover:border-[#ccff00]/50 transition flex flex-col justify-between group"
+            className="bg-[#14161f] border border-zinc-800/80 rounded-2xl overflow-hidden hover:border-[#ccff00]/40 transition duration-300 flex flex-col justify-between group"
           >
             <div>
-              <div className="w-full h-48 relative mb-4 rounded-lg bg-zinc-950 overflow-hidden flex items-center justify-center">
-                <Image
+              {/* Card Image Banner */}
+              <div className="w-full h-52 relative bg-zinc-950 overflow-hidden">
+                <img
                   src={item.image || "/hero-banner.png"}
                   alt={item.name}
-                  fill
-                  className="object-contain p-4 group-hover:scale-105 transition"
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                 />
               </div>
 
-              <div className="flex flex-wrap gap-1.5 mb-2">
-                {item.category?.map((cat, idx) => (
-                  <span
-                    key={idx}
-                    className="bg-zinc-800 text-[#ccff00] text-[10px] font-bold px-2 py-0.5 rounded uppercase"
-                  >
-                    {cat}
-                  </span>
-                ))}
-              </div>
+              {/* Card Body */}
+              <div className="p-5">
+                {/* Strictly Always 2 Yellow Category Badges */}
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {Array.isArray(item.category) && item.category.length >= 2 ? (
+                    item.category.slice(0, 2).map((cat, idx) => (
+                      <span
+                        key={idx}
+                        className="bg-[#ccff00] text-black text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider"
+                      >
+                        {cat}
+                      </span>
+                    ))
+                  ) : (
+                    <>
+                      <span className="bg-[#ccff00] text-black text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                        {item.category?.[0] || "CHEST"}
+                      </span>
+                      <span className="bg-[#ccff00] text-black text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                        {item.category?.[1] || "ARMS"}
+                      </span>
+                    </>
+                  )}
+                </div>
 
-              <h3 className="font-bold text-lg text-white group-hover:text-[#ccff00] transition mb-1">
-                {item.name}
-              </h3>
-              <p className="text-xs text-zinc-400 mb-4">{item.equipment}</p>
+                {/* Title */}
+                <h3 className="font-extrabold text-xl text-white group-hover:text-[#ccff00] transition font-mono uppercase tracking-wide mb-1">
+                  {item.name}
+                </h3>
+                {/* Subtitle / Equipment */}
+                <p className="text-xs text-zinc-400 font-mono mb-4">
+                  {item.equipment}
+                </p>
+              </div>
             </div>
 
-            <div className="flex items-center justify-between text-xs text-zinc-400 border-t border-zinc-800 pt-3 font-mono">
-              <span className="flex items-center gap-1">
+            {/* Card Footer Metrics */}
+            <div className="flex items-center gap-4 text-xs text-zinc-400 px-5 pb-5 pt-1 font-mono">
+              <span className="flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 text-zinc-500" /> {item.duration} min
               </span>
-              <span className="flex items-center gap-1">
-                <Flame className="w-3.5 h-3.5 text-amber-500" /> {item.calories} kcal
+              <span className="flex items-center gap-1.5">
+                <Flame className="w-3.5 h-3.5 text-zinc-500" /> {item.calories} kcal
               </span>
-              <span className="flex items-center gap-1">
-                <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" /> {item.rating}
+              <span className="flex items-center gap-1.5">
+                <Star className="w-3.5 h-3.5 text-zinc-500" /> {item.rating}
               </span>
             </div>
           </Link>
