@@ -1,6 +1,17 @@
-/** @type {import('next').NextConfig} */
+/** @type {import('next').NextJSConfig} */
 const nextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**", // Sob external image domain allow korar jonno
+      },
+      {
+        protocol: "http",
+        hostname: "**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
