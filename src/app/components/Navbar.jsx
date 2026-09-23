@@ -1,39 +1,42 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { usePlan } from "../context/PlanContext";
 
-export default function Navbar({ planCount = 0, savedCount = 0 }) {
+export default function Navbar() {
   const pathname = usePathname();
+  const { plan, saved } = usePlan();
 
   const isWorkoutsActive = pathname === "/" || pathname.startsWith("/workout");
   const isMyPlanActive = pathname === "/my-plan";
 
   return (
-    <header className="bg-[#0a0a0c] border-b border-zinc-800 text-white sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <header className="bg-[#0b0c10] border-b border-zinc-900 text-white sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
         
-        {/* Left: Brand Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <svg
-            className="w-6 h-6 text-[#ccff00]"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 6.29 3.43 4.86 2 3.43 3.43 2 4.86 3.43 6.29 2 7.71 3.43 9.14 2 10.57 3.43 12 7 3.43 15.57 7 12 8.43 13.43 7 14.86 8.43 16.29 7 17.71 8.43 19.14 7 20.57 8.43 22 9.86 20.57 11.29 22 12.71 20.57 14.14 22 15.57 20.57 17 22 18.43 20.57 19.86 22 21.29 20.57 20.57 20.57z" />
-          </svg>
-          <span className="font-extrabold tracking-wider text-lg font-mono">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-3">
+          <Image
+            src="/logo.png"
+            alt="FitLog Logo"
+            width={32}
+            height={32}
+            className="w-8 h-8 object-contain"
+          />
+          <span className="font-extrabold tracking-wider text-xl font-mono">
             FITLOG
           </span>
         </Link>
 
-        {/* Middle: Navigation Links (Workouts & My Plan) */}
-        <nav className="flex items-center gap-2 bg-zinc-900/80 p-1 rounded-full border border-zinc-800">
+        {/* Middle Nav Links */}
+        <nav className="flex items-center gap-1.5 bg-[#12141a] p-1.5 rounded-full border border-zinc-800/60">
           <Link
             href="/"
-            className={`px-5 py-1.5 rounded-full text-xs font-semibold transition-all ${
+            className={`px-6 py-2 rounded-full text-xs font-bold transition-all ${
               isWorkoutsActive
-                ? "bg-[#ccff00] text-black shadow-sm"
+                ? "bg-[#ccff00] text-black shadow-md"
                 : "text-zinc-400 hover:text-white"
             }`}
           >
@@ -42,9 +45,9 @@ export default function Navbar({ planCount = 0, savedCount = 0 }) {
 
           <Link
             href="/my-plan"
-            className={`px-5 py-1.5 rounded-full text-xs font-semibold transition-all ${
+            className={`px-6 py-2 rounded-full text-xs font-bold transition-all ${
               isMyPlanActive
-                ? "bg-[#ccff00] text-black shadow-sm"
+                ? "bg-[#ccff00] text-black shadow-md"
                 : "text-zinc-400 hover:text-white"
             }`}
           >
@@ -52,28 +55,27 @@ export default function Navbar({ planCount = 0, savedCount = 0 }) {
           </Link>
         </nav>
 
-        {/* Right: Badges / Counter Buttons */}
+        {/* Right Badges */}
         <div className="flex items-center gap-3 text-xs font-mono">
-          {/* Plan Badge */}
           <Link
             href="/my-plan"
-            className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 px-3 py-1.5 rounded-full transition"
+            className="flex items-center gap-2.5 bg-[#12141a] border border-zinc-800/80 hover:border-zinc-700 px-4 py-2 rounded-full transition"
           >
             <span className="text-zinc-400">Plan</span>
-            <span className="bg-[#ccff00] text-black font-bold w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
-              {planCount}
+            <span className="bg-[#ccff00] text-black font-extrabold w-5 h-5 rounded-full flex items-center justify-center text-[11px]">
+              {plan?.length || 0}
             </span>
           </Link>
 
-          {/* Saved Badge */}
-          <button
-            className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 px-3 py-1.5 rounded-full transition cursor-pointer"
+          <Link
+            href="/my-plan"
+            className="flex items-center gap-2.5 bg-[#12141a] border border-zinc-800/80 hover:border-zinc-700 px-4 py-2 rounded-full transition"
           >
             <span className="text-zinc-400">Saved</span>
-            <span className="bg-zinc-800 text-zinc-300 font-bold w-5 h-5 rounded-full flex items-center justify-center text-[10px]">
-              {savedCount}
+            <span className="bg-zinc-800 text-zinc-300 font-extrabold w-5 h-5 rounded-full flex items-center justify-center text-[11px]">
+              {saved?.length || 0}
             </span>
-          </button>
+          </Link>
         </div>
 
       </div>
