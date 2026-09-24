@@ -11,6 +11,14 @@ export default function WorkoutDetailPage() {
   const [workout, setWorkout] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Safe helper to extract numeric values
+  const getNum = (val) => {
+    if (!val) return 0;
+    if (typeof val === "number") return val;
+    const parsed = parseFloat(String(val).replace(/[^0-9.]/g, ""));
+    return isNaN(parsed) ? 0 : parsed;
+  };
+
   useEffect(() => {
     if (!id) return;
 
@@ -59,6 +67,12 @@ export default function WorkoutDetailPage() {
       </div>
     );
   }
+
+  // Dynamic Calories calculation
+  const durationVal = getNum(workout.duration);
+  const caloriesVal =
+    getNum(workout.calories || workout.calorie || workout.kcal) ||
+    (durationVal ? durationVal * 8 : 150);
 
   return (
     <div className="bg-[#0b0c10] text-white min-h-screen py-10 px-6 sm:px-12">
@@ -127,15 +141,15 @@ export default function WorkoutDetailPage() {
               </div>
               <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
                 <span className="text-zinc-500 uppercase tracking-wider">DURATION</span>
-                <span className="font-semibold text-zinc-200">{workout.duration} min</span>
+                <span className="font-semibold text-zinc-200">{durationVal} min</span>
               </div>
               <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
                 <span className="text-zinc-500 uppercase tracking-wider">CALORIES</span>
-                <span className="font-semibold text-zinc-200">{workout.calories} kcal</span>
+                <span className="font-semibold text-zinc-200">{caloriesVal} kcal</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-zinc-500 uppercase tracking-wider">RATING</span>
-                <span className="font-semibold text-zinc-200">{workout.rating}</span>
+                <span className="font-semibold text-zinc-200">{workout.rating || "4.5"}</span>
               </div>
             </div>
 
@@ -160,7 +174,7 @@ export default function WorkoutDetailPage() {
           </div>
 
           {/* Action Buttons */}
-          <DetailActions workout={workout} />
+          <DetailActions workout={{ ...workout, calories: caloriesVal }} />
         </div>
 
       </div>
