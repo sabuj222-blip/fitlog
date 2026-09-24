@@ -155,20 +155,19 @@ export default function MyPlanPage() {
 
         {/* List Section */}
         {sortedList.length === 0 ? (
-          <div className="bg-[#14161f] border border-zinc-800/60 rounded-2xl p-12 text-center my-6">
-            <p className="text-zinc-400 text-sm font-sans mb-4">
-              {activeTab === "plan"
-                ? "No workouts added to Today's Plan yet."
-                : "No workouts saved for later."}
+          <div className="bg-[#12141c]/50 border border-dashed border-zinc-800/80 rounded-2xl py-16 px-6 text-center my-6 flex flex-col items-center justify-center">
+            <h3 className={`${oswald.className} text-2xl font-bold text-white uppercase tracking-wide mb-1`}>
+              NOTHING HERE YET
+            </h3>
+            <p className="text-zinc-400 text-xs sm:text-sm font-sans mb-6 max-w-sm">
+              Browse the library and add a lift to get today moving.
             </p>
-            {activeTab === "plan" && (
-              <Link
-                href="/"
-                className={`${oswald.className} inline-flex items-center gap-2 bg-[#ccff00] text-black text-xs font-bold px-5 py-2.5 rounded-lg uppercase tracking-wider`}
-              >
-                Browse Workouts <ArrowRight className="w-4 h-4" />
-              </Link>
-            )}
+            <Link
+              href="/"
+              className={`${oswald.className} bg-[#ccff00] hover:bg-[#b8e600] text-black text-xs font-bold px-6 py-2.5 rounded-full uppercase tracking-wider transition`}
+            >
+              Go to workouts
+            </Link>
           </div>
         ) : (
           <div className="space-y-4">
