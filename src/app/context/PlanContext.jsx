@@ -1,4 +1,5 @@
 "use client";
+
 import { createContext, useContext, useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
@@ -31,7 +32,7 @@ export const PlanProvider = ({ children }) => {
       toast.error("Cap of five lifts reached!");
       return;
     }
-    if (plan.some((item) => item.id === workout.id)) {
+    if (plan.some((item) => String(item.id) === String(workout.id))) {
       toast("Already in today's plan!", { icon: "ℹ️" });
       return;
     }
@@ -41,7 +42,7 @@ export const PlanProvider = ({ children }) => {
 
   // Save for later
   const addToSaved = (workout) => {
-    if (saved.some((item) => item.id === workout.id)) {
+    if (saved.some((item) => String(item.id) === String(workout.id))) {
       toast("Already saved for later!", { icon: "ℹ️" });
       return;
     }
@@ -53,7 +54,7 @@ export const PlanProvider = ({ children }) => {
   const toggleDone = (id) => {
     setPlan(
       plan.map((item) =>
-        item.id === id ? { ...item, done: !item.done } : item
+        String(item.id) === String(id) ? { ...item, done: !item.done } : item
       )
     );
     toast.success("Workout status updated!");
@@ -61,13 +62,17 @@ export const PlanProvider = ({ children }) => {
 
   // Remove from Plan
   const removeFromPlan = (id) => {
-    setPlan(plan.filter((item) => item.id !== id));
-    toast.success("Removed from plan!");
+    setPlan((prevPlan) =>
+      prevPlan.filter((item) => String(item.id) !== String(id))
+    );
+    toast.success("Removed from today's plan!");
   };
 
   // Remove from Saved
   const removeFromSaved = (id) => {
-    setSaved(saved.filter((item) => item.id !== id));
+    setSaved((prevSaved) =>
+      prevSaved.filter((item) => String(item.id) !== String(id))
+    );
     toast.success("Removed from saved!");
   };
 

@@ -1,86 +1,160 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import DetailActions from "../../components/DetailActions";
 
-// Fetch and match by id or slug flexible conversion
-async function getWorkoutDetail(id) {
-  try {
-    const res = await fetch("https://api.abcz.workers.dev/api/fitlog", {
-      cache: "no-store",
-    });
-    if (!res.ok) return null;
-    const workouts = await res.json();
-    
-    // Check match by string ID, numeric ID, or slug
-    return workouts.find(
-      (w) =>
-        String(w.id).toLowerCase() === String(id).toLowerCase() ||
-        String(w.slug).toLowerCase() === String(id).toLowerCase()
-    ) || null;
-  } catch (error) {
-    return null;
-  }
-}
+export default function WorkoutDetailPage() {
+  const params = useParams();
+  const id = params?.id;
 
-export default async function WorkoutDetailPage({ params }) {
-  const resolvedParams = await params;
-  const workout = await getWorkoutDetail(resolvedParams.id);
+  const [workout, setWorkout] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!id) return;
+
+    async function fetchWorkout() {
+      try {
+        setLoading(true);
+        const res = await fetch("https://api.abcz.workers.dev/api/fitlog");
+        const workouts = await res.json();
+
+        if (Array.isArray(workouts)) {
+          const targetId = String(id).trim().toLowerCase();
+
+          // Match by id or slug
+          const found = workouts.find((w) => {
+            const wId = String(w.id || "").trim().toLowerCase();
+            const wSlug = String(w.slug || "").trim().toLowerCase();
+            return wId === targetId || wSlug === targetId;
+          });
+
+          setWorkout(found || null);
+        }
+      } catch (err) {
+        console.error("Error fetching detail:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchWorkout();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-[70vh] bg-[#0b0c10] text-white flex flex-col items-center justify-center font-mono">
+        <div className="w-8 h-8 border-4 border-[#ccff00] border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p className="text-zinc-400 text-sm">Loading Workout Details...</p>
+      </div>
+    );
+  }
 
   if (!workout) {
     return (
-      <div className="min-h-[70vh] bg-[#0a0a0c] text-white flex items-center justify-center">
-        <p className="text-red-400 font-mono">Workout not found!</p>
+      <div className="min-h-[70vh] bg-[#0b0c10] text-white flex flex-col items-center justify-center font-mono gap-3">
+        <p className="text-red-400 text-lg font-bold">Workout not found!</p>
+        <p className="text-zinc-500 text-xs">Requested ID: {id || "None"}</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-[#0a0a0c] text-white min-h-screen py-12 px-6">
-      <div className="max-w-6xl mx-auto bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-10">
+    <div className="bg-[#0b0c10] text-white min-h-screen py-10 px-6 sm:px-12">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
         
-        {/* Left Column: Visual Banner */}
-        <div className="bg-zinc-950 rounded-xl p-6 flex items-center justify-center border border-zinc-800 relative min-h-[350px]">
+        {/* Dynamic Image */}
+        <div className="md:col-span-6 w-full aspect-square relative bg-[#14161f] rounded-3xl overflow-hidden border border-zinc-800/60 shadow-2xl">
           <img
             src={workout.image || "/hero-banner.png"}
             alt={workout.name}
-            className="max-h-[300px] max-w-full object-contain p-4"
+            className="w-full h-full object-cover"
           />
         </div>
 
-        {/* Right Column: Key Details & Specs */}
-        <div className="flex flex-col justify-between">
+        {/* Dynamic Content */}
+        <div className="md:col-span-6 flex flex-col justify-between h-full pt-2">
           <div>
-            <div className="flex flex-wrap gap-2 mb-3">
-              {workout.category?.map((cat, idx) => (
-                <span key={idx} className="bg-zinc-800 text-[#ccff00] text-xs font-bold px-2.5 py-1 rounded uppercase">
-                  {cat}
-                </span>
-              ))}
-            </div>
-            <h1 className="text-3xl md:text-4xl font-extrabold mb-3 uppercase tracking-wide font-mono text-white">
+            <h1 className="text-3xl md:text-4xl font-extrabold uppercase tracking-tight font-mono text-white mb-2">
               {workout.name}
             </h1>
-            <p className="text-zinc-400 text-sm mb-6">{workout.description}</p>
 
-            {/* Spec Table Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 bg-zinc-950 p-4 rounded-xl border border-zinc-800/80 mb-6 text-xs font-mono">
-              <div><p className="text-zinc-500 uppercase">Equipment</p><p className="font-semibold text-white">{workout.equipment}</p></div>
-              <div><p className="text-zinc-500 uppercase">Difficulty</p><p className="font-semibold text-white">{workout.difficulty}</p></div>
-              <div><p className="text-zinc-500 uppercase">Sets / Reps</p><p className="font-semibold text-white">{workout.sets} x {workout.reps}</p></div>
-              <div><p className="text-zinc-500 uppercase">Duration</p><p className="font-semibold text-white">{workout.duration} min</p></div>
-              <div><p className="text-zinc-500 uppercase">Calories</p><p className="font-semibold text-white">{workout.calories} kcal</p></div>
-              <div><p className="text-zinc-500 uppercase">Rating</p><p className="font-semibold text-white">{workout.rating} / 5</p></div>
+            <p className="text-zinc-400 text-sm leading-relaxed mb-4">
+              {workout.description || "A targeted exercise to build strength and endurance."}
+            </p>
+
+            {/* Dynamic Badges */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {Array.isArray(workout.category) && workout.category.length > 0 ? (
+                workout.category.slice(0, 2).map((cat, idx) => (
+                  <span
+                    key={idx}
+                    className="bg-[#ccff00] text-black text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider font-mono"
+                  >
+                    {cat}
+                  </span>
+                ))
+              ) : (
+                <>
+                  <span className="bg-[#ccff00] text-black text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider font-mono">
+                    CHEST
+                  </span>
+                  <span className="bg-[#ccff00] text-black text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider font-mono">
+                    ARMS
+                  </span>
+                </>
+              )}
             </div>
 
-            {/* Step-by-Step Instructions */}
+            {/* Dynamic Specs Table */}
+            <div className="bg-[#12141c] border border-zinc-800/80 rounded-2xl p-5 mb-6 text-xs font-mono space-y-3.5">
+              <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
+                <span className="text-zinc-500 uppercase tracking-wider">EQUIPMENT</span>
+                <span className="font-semibold text-zinc-200">{workout.equipment || "Bodyweight"}</span>
+              </div>
+              <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
+                <span className="text-zinc-500 uppercase tracking-wider">DIFFICULTY</span>
+                <span className="font-semibold text-zinc-200">{workout.difficulty || "Intermediate"}</span>
+              </div>
+              <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
+                <span className="text-zinc-500 uppercase tracking-wider">SETS</span>
+                <span className="font-semibold text-zinc-200">{workout.sets || "4"}</span>
+              </div>
+              <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
+                <span className="text-zinc-500 uppercase tracking-wider">REPS</span>
+                <span className="font-semibold text-zinc-200">{workout.reps || "8-12"}</span>
+              </div>
+              <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
+                <span className="text-zinc-500 uppercase tracking-wider">DURATION</span>
+                <span className="font-semibold text-zinc-200">{workout.duration} min</span>
+              </div>
+              <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
+                <span className="text-zinc-500 uppercase tracking-wider">CALORIES</span>
+                <span className="font-semibold text-zinc-200">{workout.calories} kcal</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-zinc-500 uppercase tracking-wider">RATING</span>
+                <span className="font-semibold text-zinc-200">{workout.rating}</span>
+              </div>
+            </div>
+
+            {/* Dynamic Instructions */}
             <div className="mb-8">
-              <h3 className="font-bold text-sm uppercase text-zinc-300 mb-3 tracking-wider font-mono">INSTRUCTIONS</h3>
-              <ol className="space-y-2 text-xs text-zinc-400">
-                {workout.instructions?.map((step, idx) => (
-                  <li key={idx} className="flex gap-3">
-                    <span className="text-[#ccff00] font-bold">{idx + 1}.</span>
-                    <span>{step}</span>
-                  </li>
-                ))}
+              <h3 className="font-bold text-xs uppercase text-zinc-200 mb-3 tracking-widest font-mono">
+                INSTRUCTIONS
+              </h3>
+              <ol className="space-y-2 text-xs text-zinc-400 font-sans">
+                {Array.isArray(workout.instructions) && workout.instructions.length > 0 ? (
+                  workout.instructions.map((step, idx) => (
+                    <li key={idx} className="flex gap-2">
+                      <span className="text-zinc-500">{idx + 1}.</span>
+                      <span>{step}</span>
+                    </li>
+                  ))
+                ) : (
+                  <li className="text-zinc-500">No instructions available for this workout.</li>
+                )}
               </ol>
             </div>
           </div>
@@ -88,6 +162,7 @@ export default async function WorkoutDetailPage({ params }) {
           {/* Action Buttons */}
           <DetailActions workout={workout} />
         </div>
+
       </div>
     </div>
   );
