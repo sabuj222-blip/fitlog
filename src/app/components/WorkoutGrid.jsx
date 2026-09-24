@@ -2,6 +2,13 @@
 
 import Link from "next/link";
 import { Clock, Flame, Star } from "lucide-react";
+import { Oswald } from "next/font/google";
+
+// Oswald Font Config
+const oswald = Oswald({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
 
 export default function WorkoutGrid({ initialWorkouts = [] }) {
   // Safe helper to extract numeric values
@@ -16,10 +23,10 @@ export default function WorkoutGrid({ initialWorkouts = [] }) {
     <>
       {/* Header Section */}
       <div className="mb-8 pb-6 border-b border-zinc-900/80">
-        <h2 className="text-3xl font-extrabold uppercase tracking-wider font-mono text-white">
+        <h2 className={`${oswald.className} text-3xl sm:text-4xl font-bold uppercase tracking-wide text-white`}>
           THE LIBRARY
         </h2>
-        <p className="text-zinc-400 text-sm mt-1">
+        <p className="text-zinc-400 text-sm mt-1 font-sans">
           Twelve lifts covering every major muscle group.
         </p>
       </div>
@@ -50,33 +57,33 @@ export default function WorkoutGrid({ initialWorkouts = [] }) {
 
                 {/* Card Body */}
                 <div className="p-5">
-                  {/* Badges - 2 Yellow Pills */}
+                  {/* Badges - 2 Yellow Pills with Oswald */}
                   <div className="flex flex-wrap gap-2 mb-3">
                     {Array.isArray(item.category) && item.category.length >= 2 ? (
                       item.category.slice(0, 2).map((cat, idx) => (
                         <span
                           key={idx}
-                          className="bg-[#ccff00] text-black text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider font-mono"
+                          className={`${oswald.className} bg-[#ccff00] text-black text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider`}
                         >
                           {cat}
                         </span>
                       ))
                     ) : (
                       <>
-                        <span className="bg-[#ccff00] text-black text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider font-mono">
+                        <span className={`${oswald.className} bg-[#ccff00] text-black text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider`}>
                           {item.category?.[0] || "CHEST"}
                         </span>
-                        <span className="bg-[#ccff00] text-black text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider font-mono">
+                        <span className={`${oswald.className} bg-[#ccff00] text-black text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider`}>
                           {item.category?.[1] || "ARMS"}
                         </span>
                       </>
                     )}
                   </div>
 
-                  <h3 className="font-extrabold text-xl text-white group-hover:text-[#ccff00] transition font-mono uppercase tracking-wide mb-1">
+                  <h3 className={`${oswald.className} font-bold text-xl text-white group-hover:text-[#ccff00] transition uppercase tracking-tight mb-1`}>
                     {item.name}
                   </h3>
-                  <p className="text-xs text-zinc-400 font-mono mb-4">
+                  <p className="text-xs text-zinc-400 font-sans mb-4">
                     {item.equipment}
                   </p>
                 </div>

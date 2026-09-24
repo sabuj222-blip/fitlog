@@ -3,6 +3,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import DetailActions from "../../components/DetailActions";
+import { Oswald } from "next/font/google";
+
+// Oswald Font Config
+const oswald = Oswald({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
 
 export default function WorkoutDetailPage() {
   const params = useParams();
@@ -62,7 +69,9 @@ export default function WorkoutDetailPage() {
   if (!workout) {
     return (
       <div className="min-h-[70vh] bg-[#0b0c10] text-white flex flex-col items-center justify-center font-mono gap-3">
-        <p className="text-red-400 text-lg font-bold">Workout not found!</p>
+        <p className={`${oswald.className} text-red-400 text-xl font-bold uppercase tracking-wide`}>
+          Workout not found!
+        </p>
         <p className="text-zinc-500 text-xs">Requested ID: {id || "None"}</p>
       </div>
     );
@@ -90,72 +99,73 @@ export default function WorkoutDetailPage() {
         {/* Dynamic Content */}
         <div className="md:col-span-6 flex flex-col justify-between h-full pt-2">
           <div>
-            <h1 className="text-3xl md:text-4xl font-extrabold uppercase tracking-tight font-mono text-white mb-2">
+            {/* Workout Title with Oswald */}
+            <h1 className={`${oswald.className} text-3xl md:text-5xl font-bold uppercase tracking-tight text-white mb-3`}>
               {workout.name}
             </h1>
 
-            <p className="text-zinc-400 text-sm leading-relaxed mb-4">
+            <p className="text-zinc-400 text-sm leading-relaxed mb-5 font-sans">
               {workout.description || "A targeted exercise to build strength and endurance."}
             </p>
 
-            {/* Dynamic Badges */}
+            {/* Dynamic Badges with Oswald */}
             <div className="flex flex-wrap gap-2 mb-6">
               {Array.isArray(workout.category) && workout.category.length > 0 ? (
                 workout.category.slice(0, 2).map((cat, idx) => (
                   <span
                     key={idx}
-                    className="bg-[#ccff00] text-black text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider font-mono"
+                    className={`${oswald.className} bg-[#ccff00] text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider`}
                   >
                     {cat}
                   </span>
                 ))
               ) : (
                 <>
-                  <span className="bg-[#ccff00] text-black text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider font-mono">
+                  <span className={`${oswald.className} bg-[#ccff00] text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider`}>
                     CHEST
                   </span>
-                  <span className="bg-[#ccff00] text-black text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider font-mono">
+                  <span className={`${oswald.className} bg-[#ccff00] text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider`}>
                     ARMS
                   </span>
                 </>
               )}
             </div>
 
-            {/* Dynamic Specs Table */}
-            <div className="bg-[#12141c] border border-zinc-800/80 rounded-2xl p-5 mb-6 text-xs font-mono space-y-3.5">
+            {/* Dynamic Specs Table with Oswald Labels */}
+            <div className="bg-[#12141c] border border-zinc-800/80 rounded-2xl p-5 mb-6 text-xs space-y-3.5">
               <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
-                <span className="text-zinc-500 uppercase tracking-wider">EQUIPMENT</span>
-                <span className="font-semibold text-zinc-200">{workout.equipment || "Bodyweight"}</span>
+                <span className={`${oswald.className} text-zinc-500 uppercase tracking-wider font-semibold text-sm`}>EQUIPMENT</span>
+                <span className="font-semibold text-zinc-200 font-mono">{workout.equipment || "Bodyweight"}</span>
               </div>
               <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
-                <span className="text-zinc-500 uppercase tracking-wider">DIFFICULTY</span>
-                <span className="font-semibold text-zinc-200">{workout.difficulty || "Intermediate"}</span>
+                <span className={`${oswald.className} text-zinc-500 uppercase tracking-wider font-semibold text-sm`}>DIFFICULTY</span>
+                <span className="font-semibold text-zinc-200 font-mono">{workout.difficulty || "Intermediate"}</span>
               </div>
               <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
-                <span className="text-zinc-500 uppercase tracking-wider">SETS</span>
-                <span className="font-semibold text-zinc-200">{workout.sets || "4"}</span>
+                <span className={`${oswald.className} text-zinc-500 uppercase tracking-wider font-semibold text-sm`}>SETS</span>
+                <span className="font-semibold text-zinc-200 font-mono">{workout.sets || "4"}</span>
               </div>
               <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
-                <span className="text-zinc-500 uppercase tracking-wider">REPS</span>
-                <span className="font-semibold text-zinc-200">{workout.reps || "8-12"}</span>
+                <span className={`${oswald.className} text-zinc-500 uppercase tracking-wider font-semibold text-sm`}>REPS</span>
+                <span className="font-semibold text-zinc-200 font-mono">{workout.reps || "8-12"}</span>
               </div>
               <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
-                <span className="text-zinc-500 uppercase tracking-wider">DURATION</span>
-                <span className="font-semibold text-zinc-200">{durationVal} min</span>
+                <span className={`${oswald.className} text-zinc-500 uppercase tracking-wider font-semibold text-sm`}>DURATION</span>
+                <span className="font-semibold text-zinc-200 font-mono">{durationVal} min</span>
               </div>
               <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
-                <span className="text-zinc-500 uppercase tracking-wider">CALORIES</span>
-                <span className="font-semibold text-zinc-200">{caloriesVal} kcal</span>
+                <span className={`${oswald.className} text-zinc-500 uppercase tracking-wider font-semibold text-sm`}>CALORIES</span>
+                <span className="font-semibold text-zinc-200 font-mono">{caloriesVal} kcal</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-zinc-500 uppercase tracking-wider">RATING</span>
-                <span className="font-semibold text-zinc-200">{workout.rating || "4.5"}</span>
+                <span className={`${oswald.className} text-zinc-500 uppercase tracking-wider font-semibold text-sm`}>RATING</span>
+                <span className="font-semibold text-zinc-200 font-mono">{workout.rating || "4.5"}</span>
               </div>
             </div>
 
-            {/* Dynamic Instructions */}
+            {/* Dynamic Instructions with Oswald Header */}
             <div className="mb-8">
-              <h3 className="font-bold text-xs uppercase text-zinc-200 mb-3 tracking-widest font-mono">
+              <h3 className={`${oswald.className} font-bold text-sm uppercase text-zinc-200 mb-3 tracking-widest`}>
                 INSTRUCTIONS
               </h3>
               <ol className="space-y-2 text-xs text-zinc-400 font-sans">

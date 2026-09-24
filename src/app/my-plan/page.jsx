@@ -4,6 +4,13 @@ import { useState } from "react";
 import { usePlan } from "../context/PlanContext";
 import Link from "next/link";
 import { ChevronDown, ArrowRight, Clock, Flame, Star, Check, X } from "lucide-react";
+import { Oswald } from "next/font/google";
+
+// Oswald Font Config
+const oswald = Oswald({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
 
 export default function MyPlanPage() {
   const { plan, saved, toggleDone, removeFromPlan, removeFromSaved } = usePlan();
@@ -59,12 +66,12 @@ export default function MyPlanPage() {
     <div className="bg-[#0b0c10] text-white min-h-screen py-10 px-6 sm:px-12">
       <div className="max-w-6xl mx-auto space-y-6">
         
-        {/* Page Title */}
+        {/* Page Title with Oswald */}
         <div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold font-mono tracking-tight text-white uppercase">
+          <h1 className={`${oswald.className} text-3xl sm:text-5xl font-bold tracking-tight text-white uppercase`}>
             MY PLAN
           </h1>
-          <p className="text-xs sm:text-sm text-zinc-400 font-mono mt-1">
+          <p className="text-xs sm:text-sm text-zinc-400 font-sans mt-1">
             Cap of five lifts for today. Finish them, then load more.
           </p>
         </div>
@@ -73,30 +80,30 @@ export default function MyPlanPage() {
         <div className="bg-[#12141c] border border-zinc-800/80 rounded-2xl p-6 sm:p-8 grid grid-cols-3 gap-4 text-center sm:text-left">
           {/* Exercises */}
           <div className="border-r border-zinc-800/60 last:border-r-0 pr-4">
-            <p className="text-xs font-mono text-zinc-400 font-medium tracking-wide">
+            <p className={`${oswald.className} text-xs font-semibold text-zinc-400 uppercase tracking-wider`}>
               Exercises
             </p>
-            <p className="text-3xl sm:text-5xl font-extrabold font-mono text-[#ccff00] mt-2">
+            <p className={`${oswald.className} text-3xl sm:text-5xl font-bold text-[#ccff00] mt-1`}>
               {totalExercises}
             </p>
           </div>
 
           {/* Minutes */}
           <div className="border-r border-zinc-800/60 last:border-r-0 px-2 sm:px-4">
-            <p className="text-xs font-mono text-zinc-400 font-medium tracking-wide">
+            <p className={`${oswald.className} text-xs font-semibold text-zinc-400 uppercase tracking-wider`}>
               Minutes
             </p>
-            <p className="text-3xl sm:text-5xl font-extrabold font-mono text-white mt-2">
+            <p className={`${oswald.className} text-3xl sm:text-5xl font-bold text-white mt-1`}>
               {totalMinutes}
             </p>
           </div>
 
           {/* Calories */}
           <div className="pl-2 sm:pl-4">
-            <p className="text-xs font-mono text-zinc-400 font-medium tracking-wide">
+            <p className={`${oswald.className} text-xs font-semibold text-zinc-400 uppercase tracking-wider`}>
               Calories
             </p>
-            <p className="text-3xl sm:text-5xl font-extrabold font-mono text-white mt-2">
+            <p className={`${oswald.className} text-3xl sm:text-5xl font-bold text-white mt-1`}>
               {totalCalories}
             </p>
           </div>
@@ -108,7 +115,7 @@ export default function MyPlanPage() {
           <div className="flex items-center bg-[#12141c] p-1.5 rounded-xl border border-zinc-800/80">
             <button
               onClick={() => setActiveTab("plan")}
-              className={`px-5 py-2 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+              className={`${oswald.className} px-5 py-2 rounded-lg text-xs uppercase font-bold tracking-wider transition-all cursor-pointer ${
                 activeTab === "plan"
                   ? "bg-[#1c202c] text-white shadow-sm"
                   : "text-zinc-400 hover:text-white"
@@ -118,7 +125,7 @@ export default function MyPlanPage() {
             </button>
             <button
               onClick={() => setActiveTab("saved")}
-              className={`px-5 py-2 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+              className={`${oswald.className} px-5 py-2 rounded-lg text-xs uppercase font-bold tracking-wider transition-all cursor-pointer ${
                 activeTab === "saved"
                   ? "bg-[#1c202c] text-white shadow-sm"
                   : "text-zinc-400 hover:text-white"
@@ -129,13 +136,13 @@ export default function MyPlanPage() {
           </div>
 
           {/* Right Side: Sort By */}
-          <div className="flex items-center gap-3 font-mono text-xs">
-            <span className="text-zinc-400">Sort By</span>
+          <div className="flex items-center gap-3 font-sans text-xs">
+            <span className={`${oswald.className} text-zinc-400 uppercase font-semibold text-xs`}>Sort By</span>
             <div className="relative">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none bg-[#12141c] border border-zinc-800/80 text-white pl-4 pr-10 py-2 rounded-xl text-xs focus:outline-none focus:border-[#ccff00] cursor-pointer"
+                className="appearance-none bg-[#12141c] border border-zinc-800/80 text-white pl-4 pr-10 py-2 rounded-xl text-xs focus:outline-none focus:border-[#ccff00] cursor-pointer font-sans"
               >
                 <option value="duration">Duration</option>
                 <option value="calories">Calories</option>
@@ -149,7 +156,7 @@ export default function MyPlanPage() {
         {/* List Section */}
         {sortedList.length === 0 ? (
           <div className="bg-[#14161f] border border-zinc-800/60 rounded-2xl p-12 text-center my-6">
-            <p className="text-zinc-400 text-sm font-mono mb-4">
+            <p className="text-zinc-400 text-sm font-sans mb-4">
               {activeTab === "plan"
                 ? "No workouts added to Today's Plan yet."
                 : "No workouts saved for later."}
@@ -157,7 +164,7 @@ export default function MyPlanPage() {
             {activeTab === "plan" && (
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 bg-[#ccff00] text-black text-xs font-mono font-extrabold px-5 py-2.5 rounded-lg uppercase"
+                className={`${oswald.className} inline-flex items-center gap-2 bg-[#ccff00] text-black text-xs font-bold px-5 py-2.5 rounded-lg uppercase tracking-wider`}
               >
                 Browse Workouts <ArrowRight className="w-4 h-4" />
               </Link>
@@ -186,10 +193,10 @@ export default function MyPlanPage() {
                     </div>
 
                     <div>
-                      <h3 className="font-extrabold text-base sm:text-lg text-white font-mono uppercase tracking-wide">
+                      <h3 className={`${oswald.className} font-bold text-lg sm:text-xl text-white uppercase tracking-tight`}>
                         {item.name}
                       </h3>
-                      <p className="text-xs text-zinc-400 font-mono mt-0.5 mb-2">
+                      <p className="text-xs text-zinc-400 font-sans mt-0.5 mb-2">
                         {item.equipment || "Bodyweight"}
                       </p>
 
@@ -213,7 +220,7 @@ export default function MyPlanPage() {
                   <div className="flex items-center gap-3 w-full sm:w-auto justify-end border-t sm:border-t-0 border-zinc-800/60 pt-3 sm:pt-0">
                     <Link
                       href={`/workout/${itemId}`}
-                      className="px-4 py-2.5 rounded-full border border-zinc-800 hover:border-zinc-700 bg-[#171923] text-zinc-300 hover:text-white text-xs font-mono font-medium transition"
+                      className={`${oswald.className} px-4 py-2.5 rounded-full border border-zinc-800 hover:border-zinc-700 bg-[#171923] text-zinc-300 hover:text-white text-xs font-semibold uppercase tracking-wider transition`}
                     >
                       View Details
                     </Link>
@@ -221,7 +228,7 @@ export default function MyPlanPage() {
                     {activeTab === "plan" && (
                       <button
                         onClick={() => toggleDone(itemId)}
-                        className={`flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-mono font-bold transition cursor-pointer ${
+                        className={`${oswald.className} flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition cursor-pointer ${
                           item.done
                             ? "bg-zinc-800 text-zinc-400 border border-zinc-700"
                             : "bg-[#ccff00] hover:bg-[#b8e600] text-black"

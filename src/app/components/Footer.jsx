@@ -1,4 +1,11 @@
 import Image from "next/image";
+import { Oswald } from "next/font/google";
+
+// Oswald Font Config
+const oswald = Oswald({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
 
 export default function Footer() {
   return (
@@ -6,9 +13,11 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
         <div className="flex items-center gap-2">
           <Image src="/logo.png" alt="FitLog Logo" width={20} height={20} className="object-contain" />
-          <span className="font-bold text-white tracking-wider text-sm font-mono">FITLOG</span>
+          <span className={`${oswald.className} font-bold text-white tracking-wider text-base uppercase`}>
+            FITLOG
+          </span>
         </div>
-        <p>© 2026 FitLog — Workout Library. Train hard, log honest.</p>
+        <p className="font-sans">© 2026 FitLog — Workout Library. Train hard, log honest.</p>
       </div>
     </footer>
   );
