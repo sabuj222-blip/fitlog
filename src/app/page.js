@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Image from "next/image";
 import WorkoutGrid from "./components/WorkoutGrid";
 import { Oswald } from "next/font/google";
@@ -17,9 +18,25 @@ async function getWorkouts() {
   return res.json();
 }
 
-export default async function HomePage() {
+// Workout Grid Fetcher Component with Suspense support
+async function WorkoutGridSection() {
   const workouts = await getWorkouts();
+  return <WorkoutGrid initialWorkouts={workouts} />;
+}
 
+// Loading Skeleton / Spinner for Exercise Data
+function ExercisesLoader() {
+  return (
+    <div className="flex flex-col items-center justify-center py-20 space-y-4">
+      <div className="w-12 h-12 rounded-full border-4 border-zinc-800 border-t-[#ccff00] animate-spin"></div>
+      <p className="text-zinc-400 font-mono text-xs uppercase tracking-widest animate-pulse">
+        Loading workouts...
+      </p>
+    </div>
+  );
+}
+
+export default function HomePage() {
   return (
     <div className="bg-[#0b0c10] text-white min-h-screen">
       {/* HERO BANNER SECTION */}
@@ -70,9 +87,11 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* WORKOUT LIBRARY GRID */}
+      {/* WORKOUT LIBRARY GRID WITH SUSPENSE LOADING */}
       <section id="library" className="max-w-7xl mx-auto px-6 sm:px-8 py-8">
-        <WorkoutGrid initialWorkouts={workouts} />
+        <Suspense fallback={<ExercisesLoader />}>
+          <WorkoutGridSection />
+        </Suspense>
       </section>
     </div>
   );

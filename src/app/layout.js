@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`scroll-smooth ${oswald.variable}`}>
       <body className="bg-[#0a0a0c] text-white flex flex-col min-h-screen">
         <PlanProvider>
-          <Toaster position="bottom-right" />
+          <Toaster position="top-right" />
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />
