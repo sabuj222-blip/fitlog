@@ -5,7 +5,6 @@ import { PlanProvider } from "./context/PlanContext";
 import { Toaster } from "react-hot-toast";
 import { Oswald } from "next/font/google";
 
-// Oswald Font Config
 const oswald = Oswald({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],

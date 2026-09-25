@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Oswald } from "next/font/google";
 
-// Oswald Font Config
+
 const oswald = Oswald({
   subsets: ["latin"],
   weight: ["500", "600", "700"],

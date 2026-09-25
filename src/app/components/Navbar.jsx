@@ -8,7 +8,7 @@ import { usePlan } from "../context/PlanContext";
 import { Oswald } from "next/font/google";
 import { Menu, X } from "lucide-react";
 
-// Oswald Font Config
+
 const oswald = Oswald({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
@@ -25,8 +25,8 @@ export default function Navbar() {
   return (
     <header className="bg-[#0b0c10] border-b border-zinc-900 text-white sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 h-20 flex items-center justify-between relative">
-        
-        {/* Task 1: Left Hamburger Icon (Mobile Only) */}
+
+
         <div className="flex md:hidden items-center">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -37,7 +37,7 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Task 2: Logo & Brand Name (Centered on Mobile, Left-aligned on Desktop) */}
+
         <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center">
           <Link href="/" className="flex items-center gap-3">
             <Image
@@ -53,32 +53,30 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Task 1: Middle Nav Links (Desktop Only) */}
+
         <nav className="hidden md:flex items-center gap-1.5 bg-[#12141a] p-1.5 rounded-full border border-zinc-800/60">
           <Link
             href="/"
-            className={`${oswald.className} px-6 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
-              isWorkoutsActive
+            className={`${oswald.className} px-6 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${isWorkoutsActive
                 ? "bg-[#ccff00] text-black shadow-md"
                 : "text-zinc-400 hover:text-white"
-            }`}
+              }`}
           >
             Workouts
           </Link>
 
           <Link
             href="/my-plan"
-            className={`${oswald.className} px-6 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
-              isMyPlanActive
+            className={`${oswald.className} px-6 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${isMyPlanActive
                 ? "bg-[#ccff00] text-black shadow-md"
                 : "text-zinc-400 hover:text-white"
-            }`}
+              }`}
           >
             My Plan
           </Link>
         </nav>
 
-        {/* Task 3: Right Badges (Responsive Compact Size on Mobile) */}
+
         <div className="flex items-center gap-1.5 sm:gap-3 text-xs">
           <Link
             href="/my-plan"
@@ -107,28 +105,26 @@ export default function Navbar() {
 
       </div>
 
-      {/* Task 1 Dropdown Drawer for Mobile */}
+
       {isMobileMenuOpen && (
         <div className="md:hidden bg-[#12141a] border-b border-zinc-800 px-6 py-4 flex flex-col gap-3">
           <Link
             href="/"
             onClick={() => setIsMobileMenuOpen(false)}
-            className={`${oswald.className} py-2.5 px-4 rounded-xl text-sm font-bold uppercase tracking-wider transition-all ${
-              isWorkoutsActive
+            className={`${oswald.className} py-2.5 px-4 rounded-xl text-sm font-bold uppercase tracking-wider transition-all ${isWorkoutsActive
                 ? "bg-[#ccff00] text-black"
                 : "text-zinc-400 hover:text-white bg-zinc-900/50"
-            }`}
+              }`}
           >
             Workouts
           </Link>
           <Link
             href="/my-plan"
             onClick={() => setIsMobileMenuOpen(false)}
-            className={`${oswald.className} py-2.5 px-4 rounded-xl text-sm font-bold uppercase tracking-wider transition-all ${
-              isMyPlanActive
+            className={`${oswald.className} py-2.5 px-4 rounded-xl text-sm font-bold uppercase tracking-wider transition-all ${isMyPlanActive
                 ? "bg-[#ccff00] text-black"
                 : "text-zinc-400 hover:text-white bg-zinc-900/50"
-            }`}
+              }`}
           >
             My Plan
           </Link>

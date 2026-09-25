@@ -9,7 +9,7 @@ export const PlanProvider = ({ children }) => {
   const [plan, setPlan] = useState([]);
   const [saved, setSaved] = useState([]);
 
-  // LocalStorage theke initial data load kora
+  
   useEffect(() => {
     try {
       const savedPlan = JSON.parse(localStorage.getItem("fitlog_plan") || "[]");
@@ -21,7 +21,7 @@ export const PlanProvider = ({ children }) => {
     }
   }, []);
 
-  // LocalStorage e data sync kora
+ 
   useEffect(() => {
     localStorage.setItem("fitlog_plan", JSON.stringify(plan));
   }, [plan]);
@@ -30,10 +30,10 @@ export const PlanProvider = ({ children }) => {
     localStorage.setItem("fitlog_saved", JSON.stringify(saved));
   }, [saved]);
 
-  // Helper function to safely get item ID
+  
   const getItemId = (item) => String(item?.id || item?._id || "").trim();
 
-  // Max 5 workouts cap check ebong Add to Plan
+  
   const addToPlan = (workout) => {
     const targetId = getItemId(workout);
 
@@ -51,7 +51,7 @@ export const PlanProvider = ({ children }) => {
     toast.success("Added to today's plan!");
   };
 
-  // Save for later
+  
   const addToSaved = (workout) => {
     const targetId = getItemId(workout);
 
@@ -64,7 +64,7 @@ export const PlanProvider = ({ children }) => {
     toast.success("Saved for later!");
   };
 
-  // Toggle Done status
+ 
   const toggleDone = (id) => {
     const targetId = String(id).trim();
 
@@ -76,7 +76,7 @@ export const PlanProvider = ({ children }) => {
     toast.success("Workout status updated!");
   };
 
-  // Remove from Plan
+
   const removeFromPlan = (id) => {
     const targetId = String(id).trim();
 
@@ -86,7 +86,7 @@ export const PlanProvider = ({ children }) => {
     toast.success("Removed from today's plan!");
   };
 
-  // Remove from Saved
+ 
   const removeFromSaved = (id) => {
     const targetId = String(id).trim();
 

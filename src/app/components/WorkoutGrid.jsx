@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Clock, Flame, Star, Search } from "lucide-react";
 import { Oswald } from "next/font/google";
 
-// Oswald Font Config
+
 const oswald = Oswald({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
@@ -14,7 +14,7 @@ const oswald = Oswald({
 export default function WorkoutGrid({ initialWorkouts = [] }) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Safe helper to extract numeric values
+
   const getNum = (val) => {
     if (!val) return 0;
     if (typeof val === "number") return val;
@@ -22,18 +22,18 @@ export default function WorkoutGrid({ initialWorkouts = [] }) {
     return isNaN(parsed) ? 0 : parsed;
   };
 
-  // Filter Logic: Name, Categories/Tags & Equipment
+
   const filteredWorkouts = initialWorkouts.filter((item) => {
     const query = searchQuery.toLowerCase().trim();
     if (!query) return true;
 
-    // 1. Name Match
+
     const matchesName = item.name?.toLowerCase().includes(query);
 
-    // 2. Equipment Match
+
     const matchesEquipment = item.equipment?.toLowerCase().includes(query);
 
-    // 3. Category / Tag Match
+
     let matchesCategory = false;
     if (Array.isArray(item.category)) {
       matchesCategory = item.category.some((cat) =>
@@ -48,7 +48,7 @@ export default function WorkoutGrid({ initialWorkouts = [] }) {
 
   return (
     <>
-      {/* Header & Search Section */}
+
       <div className="mb-8 pb-6 border-b border-zinc-900/80 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h2
@@ -61,7 +61,7 @@ export default function WorkoutGrid({ initialWorkouts = [] }) {
           </p>
         </div>
 
-        {/* Search Input Bar */}
+
         <div className="relative w-full md:w-72">
           <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -74,7 +74,7 @@ export default function WorkoutGrid({ initialWorkouts = [] }) {
         </div>
       </div>
 
-      {/* Grid Display */}
+
       {filteredWorkouts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredWorkouts.map((item) => {
@@ -90,7 +90,7 @@ export default function WorkoutGrid({ initialWorkouts = [] }) {
                 className="bg-[#14161f] border border-zinc-800/80 rounded-2xl overflow-hidden hover:border-[#ccff00]/40 transition duration-300 flex flex-col justify-between group"
               >
                 <div>
-                  {/* Image Banner */}
+
                   <div className="w-full h-52 relative bg-zinc-950 overflow-hidden">
                     <img
                       src={item.image || "/hero-banner.png"}
@@ -99,12 +99,12 @@ export default function WorkoutGrid({ initialWorkouts = [] }) {
                     />
                   </div>
 
-                  {/* Card Body */}
+
                   <div className="p-5">
-                    {/* Badges - 2 Yellow Pills with Oswald */}
+
                     <div className="flex flex-wrap gap-2 mb-3">
                       {Array.isArray(item.category) &&
-                      item.category.length >= 2 ? (
+                        item.category.length >= 2 ? (
                         item.category.slice(0, 2).map((cat, idx) => (
                           <span
                             key={idx}
@@ -140,7 +140,7 @@ export default function WorkoutGrid({ initialWorkouts = [] }) {
                   </div>
                 </div>
 
-                {/* Footer Metrics */}
+
                 <div className="flex items-center gap-4 text-xs text-zinc-400 px-5 pb-5 pt-1 font-mono">
                   <span className="flex items-center gap-1.5">
                     <Clock className="w-3.5 h-3.5 text-zinc-500" /> {durationVal}{" "}
@@ -160,7 +160,7 @@ export default function WorkoutGrid({ initialWorkouts = [] }) {
           })}
         </div>
       ) : (
-        /* Empty Filter State */
+
         <div className="text-center py-12 border border-dashed border-zinc-800 rounded-2xl">
           <p className="text-zinc-500 font-mono text-sm">
             No workouts found matching "{searchQuery}"

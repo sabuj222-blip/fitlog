@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePlan } from "../context/PlanContext";
 import { Oswald } from "next/font/google";
 
-// Oswald Font Config
+
 const oswald = Oswald({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
