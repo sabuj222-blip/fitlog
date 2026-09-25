@@ -1,6 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# FITLOG — Workout & Fitness Tracker
 
-## Getting Started
+FitLog holo ekti modern, high-performance fitness tracker web application jahapane user-ra tader daily workout plans browse, customize ebong manage korte paren. Clean dark UI ebong smooth user experience er sathe eitir responsive design optimized kora hoyeche.
+
+---
+
+## 🛠️ Technologies Used
+
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **Library**: [React](https://react.dev/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Fonts**: [Google Fonts (Oswald)](https://fonts.google.com/)
+- **Notifications**: [React Hot Toast](https://react-hot-toast.com/)
+
+---
+
+## ✨ Key Features
+
+1. **Personalized Workout Management**: Daily workout plan-e exercises add, saved list-e store ebong finish er por mark-as-done korar subidha.
+2. **Interactive Custom Sorting**: Duration (Ascending order), Calories, ebong Rating (Descending order) hazard-free custom dynamic sorting option.
+3. **Real-time Live Metrics**: Exercises count, total duration (minutes), ebong total calories consumed instantly update ebong calculate hoy.
+4. **Dynamic Search & Filter Tabs**: Easy navigation-er jonno custom tabs (Today's Plan, Saved) ebong smooth workout browsing functionality.
+5. **Custom 404 & Responsive Dark UI**: Invalid route handle korar jonno styled 404 page ebong modern mobile-friendly high-contrast dark theme.
+
+---
+
+## 🚀 Getting Started
 
 First, run the development server:
 
@@ -10,27 +35,3 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
