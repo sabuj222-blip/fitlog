@@ -6,13 +6,13 @@ import { Oswald } from "next/font/google";
 // Oswald Font Initialize
 const oswald = Oswald({
   subsets: ["latin"],
-  weight: ["700"], // Bold weight for heading
+  weight: ["700"],
 });
 
 // Server-Side Data Fetching (SSR)
 async function getWorkouts() {
   const res = await fetch("https://api.abcz.workers.dev/api/fitlog", {
-    cache: "no-store", // Ensures fresh SSR on every request
+    cache: "no-store",
   });
   if (!res.ok) throw new Error("Failed to fetch workouts");
   return res.json();
@@ -41,19 +41,31 @@ export default function HomePage() {
     <div className="bg-[#0b0c10] text-white min-h-screen">
       {/* HERO BANNER SECTION */}
       <section className="max-w-7xl mx-auto px-6 sm:px-8 pt-10 pb-6">
-        <div className="bg-[#12141c] border border-zinc-800/80 rounded-3xl p-10 md:p-14 grid grid-cols-1 md:grid-cols-12 gap-8 items-center min-h-[420px] relative overflow-hidden">
+        <div className="bg-[#12141c] border border-zinc-800/80 rounded-3xl p-8 md:p-12 lg:p-14 grid grid-cols-1 md:grid-cols-12 gap-8 items-center min-h-[420px] relative overflow-hidden">
 
           {/* Left Text Content */}
-          <div className="md:col-span-8 z-10">
+          <div className="md:col-span-7 lg:col-span-8 z-10">
             {/* Tagline */}
             <p className="text-[#ccff00] font-bold tracking-widest text-[11px] uppercase font-mono mb-6">
               WORKOUT LIBRARY
             </p>
 
-            {/* Main Heading - Exact Oswald Font & 60px */}
-            <h1 className={`${oswald.className} text-[32px] sm:text-[46px] lg:text-[60px] text-white uppercase leading-[1.05] tracking-normal mb-6`}>
-              <span className="block whitespace-nowrap">TRAIN WITH INTENT. LOG</span>
-              <span className="block whitespace-nowrap">EVERY SET.</span>
+            {/* Heading: 3 lines for <= 420px, 2 lines for > 420px */}
+            <h1 className={`${oswald.className} text-[26px] min-[421px]:text-[32px] sm:text-[38px] md:text-[42px] lg:text-[50px] xl:text-[56px] text-white uppercase leading-[1.1] tracking-tight mb-6`}>
+              {/* Line 1 */}
+              <span className="block">
+                TRAIN WITH <span className="hidden min-[421px]:inline">INTENT. LOG</span>
+              </span>
+
+              {/* Line 2 (Only visible <= 420px) */}
+              <span className="block min-[421px]:hidden">
+                INTENT. LOG
+              </span>
+
+              {/* Line 3 (<= 420px) / Line 2 (> 420px) */}
+              <span className="block">
+                EVERY SET.
+              </span>
             </h1>
 
             {/* Description Text */}
@@ -72,8 +84,8 @@ export default function HomePage() {
           </div>
 
           {/* Right Hero Image */}
-          <div className="md:col-span-4 flex justify-center md:justify-end items-center z-10">
-            <div className="relative w-full max-w-[320px] md:max-w-[380px] h-[280px] md:h-[350px] flex items-center justify-center">
+          <div className="md:col-span-5 lg:col-span-4 flex justify-center md:justify-end items-center z-10">
+            <div className="relative w-full max-w-[280px] sm:max-w-[320px] md:max-w-[340px] lg:max-w-[380px] h-[260px] sm:h-[280px] md:h-[320px] lg:h-[350px] flex items-center justify-center">
               <Image
                 src="/hero-banner.png"
                 alt="FitLog Hero Banner"

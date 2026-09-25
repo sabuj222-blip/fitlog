@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { usePlan } from "../context/PlanContext";
-import { Plus, Bookmark, Check } from "lucide-react";
+import { Plus, Bookmark } from "lucide-react";
 import { Oswald } from "next/font/google";
 import toast from "react-hot-toast";
 
@@ -47,15 +47,7 @@ export default function DetailActions({ workout }) {
               : "bg-[#ccff00] text-black font-bold hover:bg-opacity-90 cursor-pointer"
           }`}
         >
-          {isInPlan ? (
-            <>
-              <Check className="w-4 h-4" /> Added to plan
-            </>
-          ) : (
-            <>
-              <Plus className="w-4 h-4" /> Add to today's plan
-            </>
-          )}
+          <Plus className="w-4 h-4" /> Add to today's plan
         </button>
 
         {/* Save for Later Button */}
