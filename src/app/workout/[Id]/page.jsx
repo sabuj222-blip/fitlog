@@ -212,11 +212,16 @@ export default function WorkoutDetailPage() {
   };
 
   useEffect(() => {
-    if (!id) return;
+    let isMounted = true;
 
     async function fetchWorkout() {
+      if (!id) {
+        if (isMounted) setLoading(false);
+        return;
+      }
+
       try {
-        setLoading(true);
+        if (isMounted) setLoading(true);
         const res = await fetch("https://api.abcz.workers.dev/api/fitlog", {
           cache: "no-store",
         });
@@ -228,28 +233,37 @@ export default function WorkoutDetailPage() {
         const data = await res.json();
         const workouts = Array.isArray(data) ? data : data?.workouts || [];
 
-        if (Array.isArray(workouts) && workouts.length > 0) {
-          const targetId = String(id).trim().toLowerCase();
+        if (isMounted) {
+          if (Array.isArray(workouts) && workouts.length > 0) {
+            const targetId = String(id).trim().toLowerCase();
 
-          const found = workouts.find((w) => {
-            const wId = String(w.id || w._id || "").trim().toLowerCase();
-            const wSlug = String(w.slug || w.name || "").trim().toLowerCase().replace(/\s+/g, "-");
-            return wId === targetId || wSlug === targetId;
-          });
+            const found = workouts.find((w) => {
+              const wId = String(w.id ?? w._id ?? "").trim().toLowerCase();
+              const wSlug = String(w.slug || w.name || "")
+                .trim()
+                .toLowerCase()
+                .replace(/\s+/g, "-");
+              return wId === targetId || wSlug === targetId;
+            });
 
-          setWorkout(found || null);
-        } else {
-          setWorkout(null);
+            setWorkout(found || null);
+          } else {
+            setWorkout(null);
+          }
         }
       } catch (err) {
         console.error("Error fetching detail:", err);
-        setWorkout(null);
+        if (isMounted) setWorkout(null);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     }
 
     fetchWorkout();
+
+    return () => {
+      isMounted = false;
+    };
   }, [id]);
 
   if (loading) {
@@ -267,7 +281,7 @@ export default function WorkoutDetailPage() {
         <p className={`${oswald.className} text-red-400 text-xl font-bold uppercase tracking-wide`}>
           Workout not found!
         </p>
-        <p className="text-zinc-500 text-xs">Requested ID: {id || "None"}</p>
+        <p className="text-zinc-500 text-xs">Requested ID: {String(id || "None")}</p>
       </div>
     );
   }
