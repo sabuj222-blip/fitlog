@@ -3,12 +3,10 @@ import Image from "next/image";
 import WorkoutGrid from "./components/WorkoutGrid";
 import { Oswald } from "next/font/google";
 
-
 const oswald = Oswald({
   subsets: ["latin"],
   weight: ["700"],
 });
-
 
 async function getWorkouts() {
   const res = await fetch("https://api.abcz.workers.dev/api/fitlog", {
@@ -43,24 +41,31 @@ export default function HomePage() {
             <p className="text-[#ccff00] font-bold tracking-widest text-[11px] uppercase font-mono mb-6">
               WORKOUT LIBRARY
             </p>
-            <h1 className={`${oswald.className} text-[26px] min-[421px]:text-[32px] sm:text-[38px] md:text-[42px] lg:text-[50px] xl:text-[56px] text-white uppercase leading-[1.1] tracking-tight mb-6`}>
-              <span className="block">
-                TRAIN WITH <span className="hidden min-[421px]:inline">INTENT. LOG</span>
+            
+            <h1 className={`${oswald.className} text-[22px] min-[380px]:text-[25px] min-[420px]:text-[28px] sm:text-[34px] md:text-[38px] lg:text-[48px] xl:text-[54px] text-white uppercase leading-[1.15] tracking-tight mb-6`}>
+              {/* 420px ba er opore: FIXED 2 LINE (whitespace-nowrap dewate force-wrap hobe na) */}
+              <span className="hidden min-[420px]:block">
+                <span className="whitespace-nowrap">TRAIN WITH INTENT. LOG</span>
+                <br />
+                <span className="whitespace-nowrap">EVERY SET.</span>
               </span>
-              <span className="block min-[421px]:hidden">
-                INTENT. LOG
-              </span>
-              <span className="block">
+
+              {/* 420px er niche: FIXED 3 LINE (2 words per line) */}
+              <span className="block min-[420px]:hidden">
+                TRAIN WITH <br />
+                INTENT. LOG <br />
                 EVERY SET.
               </span>
             </h1>
+
             <p className="text-zinc-400 text-sm sm:text-base leading-relaxed mb-8 max-w-xl font-mono">
               FitLog is a dark, no-nonsense gym companion: pick a lift, lock it <br className="hidden sm:block" />
               into today's plan, and watch the week's work add up.
             </p>
             <a
               href="#library"
-              className="inline-block bg-[#ccff00] hover:bg-[#b8e600] text-black font-extrabold text-xs font-mono px-6 py-3.5 rounded-lg transition-colors uppercase tracking-wider">
+              className="inline-block bg-[#ccff00] hover:bg-[#b8e600] text-black font-extrabold text-xs font-mono px-6 py-3.5 rounded-lg transition-colors uppercase tracking-wider"
+            >
               BROWSE WORKOUTS
             </a>
           </div>
@@ -71,7 +76,8 @@ export default function HomePage() {
                 alt="FitLog Hero Banner"
                 fill
                 className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)]"
-                priority />
+                priority
+              />
             </div>
           </div>
         </div>

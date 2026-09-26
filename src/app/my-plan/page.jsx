@@ -17,8 +17,6 @@ export default function MyPlanPage() {
   const { plan, saved, removeFromPlan, removeFromSaved } = usePlan();
   const [activeTab, setActiveTab] = useState("plan");
   const [sortBy, setSortBy] = useState("duration");
-  
-  
   const [completedIds, setCompletedIds] = useState([]);
 
   const currentList = activeTab === "plan" ? plan : saved;
@@ -30,33 +28,24 @@ export default function MyPlanPage() {
     return isNaN(parsed) ? 0 : parsed;
   };
 
-  const getDuration = (item) => parseNum(item.duration || item.time || item.minutes || item.dur || 0);
+  const getDuration = (item) => parseNum(item.duration || item.time || item.minutes || 0);
   const getCalories = (item) => {
     const cal = parseNum(item.calories || item.calorie || item.kcal);
     return cal > 0 ? cal : getDuration(item) * 8 || 100;
   };
-  const getRating = (item) => parseNum(item.rating || item.rate || 4.5);
+  const getRating = (item) => parseNum(item.rating || 4.5);
 
-  
   const sortedList = [...currentList].sort((a, b) => {
-    if (sortBy === "duration") {
-      return getDuration(a) - getDuration(b);
-    }
-    if (sortBy === "calories") {
-      return getCalories(b) - getCalories(a);
-    }
-    if (sortBy === "rating") {
-      return getRating(b) - getRating(a);
-    }
+    if (sortBy === "duration") return getDuration(a) - getDuration(b);
+    if (sortBy === "calories") return getCalories(b) - getCalories(a);
+    if (sortBy === "rating") return getRating(b) - getRating(a);
     return 0;
   });
-
 
   const totalExercises = currentList.length;
   const totalMinutes = currentList.reduce((acc, item) => acc + getDuration(item), 0);
   const totalCalories = currentList.reduce((acc, item) => acc + getCalories(item), 0);
 
- 
   const handleRemove = (id) => {
     toast.dismiss();
     if (activeTab === "plan") {
@@ -81,7 +70,6 @@ export default function MyPlanPage() {
   return (
     <div className="bg-[#0b0c10] text-white min-h-screen py-10 px-4 sm:px-8">
       <div className="max-w-4xl mx-auto space-y-6">
-        
         <div>
           <h1 className={`${oswald.className} text-4xl font-extrabold uppercase tracking-tight text-white`}>
             MY PLAN
@@ -91,7 +79,6 @@ export default function MyPlanPage() {
           </p>
         </div>
 
-       
         <div className="bg-[#12141c] border border-zinc-800/80 rounded-2xl p-6 grid grid-cols-3 gap-4">
           <div>
             <p className="text-zinc-500 text-xs font-medium mb-1 font-sans">Exercises</p>
@@ -113,13 +100,12 @@ export default function MyPlanPage() {
           </div>
         </div>
 
-       
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
           <div className="bg-[#12141c] p-1 rounded-xl border border-zinc-800/80 inline-flex gap-1 self-start">
             <button
               type="button"
               onClick={() => setActiveTab("plan")}
-              className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+              className={`px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                 activeTab === "plan"
                   ? "bg-[#1d202c] text-white shadow-sm"
                   : "text-zinc-400 hover:text-white"
@@ -130,7 +116,7 @@ export default function MyPlanPage() {
             <button
               type="button"
               onClick={() => setActiveTab("saved")}
-              className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+              className={`px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                 activeTab === "saved"
                   ? "bg-[#1d202c] text-white shadow-sm"
                   : "text-zinc-400 hover:text-white"
@@ -148,16 +134,15 @@ export default function MyPlanPage() {
                 onChange={(e) => setSortBy(e.target.value)}
                 className="bg-[#12141c] border border-zinc-800/80 text-white rounded-xl pl-3 pr-8 py-2 outline-none focus:border-[#ccff00] cursor-pointer text-xs appearance-none font-mono"
               >
-                <option value="duration">Duration </option>
-                <option value="calories">Calories </option>
-                <option value="rating">Rating </option>
+                <option value="duration">Duration</option>
+                <option value="calories">Calories</option>
+                <option value="rating">Rating</option>
               </select>
               <ChevronDown className="w-3.5 h-3.5 text-zinc-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
           </div>
         </div>
 
-      
         {sortedList.length === 0 ? (
           <div className="bg-[#12141c]/50 border border-dashed border-zinc-800/80 rounded-2xl py-20 text-center flex flex-col items-center justify-center p-6">
             <h2 className={`${oswald.className} text-xl font-bold uppercase tracking-wider text-white mb-1`}>

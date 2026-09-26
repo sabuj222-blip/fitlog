@@ -1,27 +1,24 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import toast from "react-hot-toast";
 
 const PlanContext = createContext();
 
-export const PlanProvider = ({ children }) => {
+export function PlanProvider({ children }) {
   const [plan, setPlan] = useState([]);
   const [saved, setSaved] = useState([]);
 
-  
   useEffect(() => {
-    try {
-      const savedPlan = JSON.parse(localStorage.getItem("fitlog_plan") || "[]");
-      const savedList = JSON.parse(localStorage.getItem("fitlog_saved") || "[]");
-      setPlan(savedPlan);
-      setSaved(savedList);
-    } catch (err) {
-      console.error("Error loading plan from localStorage:", err);
+    const localPlan = localStorage.getItem("fitlog_plan");
+    const localSaved = localStorage.getItem("fitlog_saved");
+    if (localPlan) {
+      try { setPlan(JSON.parse(localPlan)); } catch (e) { console.error(e); }
+    }
+    if (localSaved) {
+      try { setSaved(JSON.parse(localSaved)); } catch (e) { console.error(e); }
     }
   }, []);
 
- 
   useEffect(() => {
     localStorage.setItem("fitlog_plan", JSON.stringify(plan));
   }, [plan]);
@@ -30,70 +27,33 @@ export const PlanProvider = ({ children }) => {
     localStorage.setItem("fitlog_saved", JSON.stringify(saved));
   }, [saved]);
 
-  
   const getItemId = (item) => String(item?.id || item?._id || "").trim();
 
-  
   const addToPlan = (workout) => {
-    const targetId = getItemId(workout);
-
-    if (plan.length >= 5) {
-      toast.error("Cap of five lifts reached!");
-      return;
-    }
-
-    if (plan.some((item) => getItemId(item) === targetId)) {
-      toast("Already in today's plan!", { icon: "ℹ️" });
-      return;
-    }
-
-    setPlan([...plan, { ...workout, done: false }]);
-    toast.success("Added to today's plan!");
+    setPlan((prev) => {
+      if (prev.length >= 5) return prev;
+      const targetId = getItemId(workout);
+      if (prev.some((item) => getItemId(item) === targetId)) return prev;
+      return [...prev, workout];
+    });
   };
 
-  
   const addToSaved = (workout) => {
-    const targetId = getItemId(workout);
-
-    if (saved.some((item) => getItemId(item) === targetId)) {
-      toast("Already saved for later!", { icon: "ℹ️" });
-      return;
-    }
-
-    setSaved([...saved, workout]);
-    toast.success("Saved for later!");
+    setSaved((prev) => {
+      const targetId = getItemId(workout);
+      if (prev.some((item) => getItemId(item) === targetId)) return prev;
+      return [...prev, workout];
+    });
   };
-
- 
-  const toggleDone = (id) => {
-    const targetId = String(id).trim();
-
-    setPlan(
-      plan.map((item) =>
-        getItemId(item) === targetId ? { ...item, done: !item.done } : item
-      )
-    );
-    toast.success("Workout status updated!");
-  };
-
 
   const removeFromPlan = (id) => {
     const targetId = String(id).trim();
-
-    setPlan((prevPlan) =>
-      prevPlan.filter((item) => getItemId(item) !== targetId)
-    );
-    toast.success("Removed from today's plan!");
+    setPlan((prev) => prev.filter((item) => getItemId(item) !== targetId));
   };
 
- 
   const removeFromSaved = (id) => {
     const targetId = String(id).trim();
-
-    setSaved((prevSaved) =>
-      prevSaved.filter((item) => getItemId(item) !== targetId)
-    );
-    toast.success("Removed from saved!");
+    setSaved((prev) => prev.filter((item) => getItemId(item) !== targetId));
   };
 
   return (
@@ -103,7 +63,6 @@ export const PlanProvider = ({ children }) => {
         saved,
         addToPlan,
         addToSaved,
-        toggleDone,
         removeFromPlan,
         removeFromSaved,
       }}
@@ -111,6 +70,6 @@ export const PlanProvider = ({ children }) => {
       {children}
     </PlanContext.Provider>
   );
-};
+}
 
 export const usePlan = () => useContext(PlanContext);
