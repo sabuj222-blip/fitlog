@@ -187,7 +187,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import Image from "next/image";
 import DetailActions from "../../components/DetailActions";
 import { Oswald } from "next/font/google";
@@ -199,7 +199,11 @@ const oswald = Oswald({
 
 export default function WorkoutDetailPage() {
   const params = useParams();
-  const id = params?.id;
+  const pathname = usePathname();
+
+  // ১. params.id চেষ্টা করবে, না পেলে URL Path (যেমন /workout/2) থেকে ২ বের করে নেবে
+  const pathId = pathname?.split("/").pop();
+  const id = params?.id || (pathId !== "workout" ? pathId : null);
 
   const [workout, setWorkout] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -212,16 +216,14 @@ export default function WorkoutDetailPage() {
   };
 
   useEffect(() => {
-    let isMounted = true;
+    if (!id) {
+      setLoading(false);
+      return;
+    }
 
     async function fetchWorkout() {
-      if (!id) {
-        if (isMounted) setLoading(false);
-        return;
-      }
-
       try {
-        if (isMounted) setLoading(true);
+        setLoading(true);
         const res = await fetch("https://api.abcz.workers.dev/api/fitlog", {
           cache: "no-store",
         });
@@ -233,37 +235,31 @@ export default function WorkoutDetailPage() {
         const data = await res.json();
         const workouts = Array.isArray(data) ? data : data?.workouts || [];
 
-        if (isMounted) {
-          if (Array.isArray(workouts) && workouts.length > 0) {
-            const targetId = String(id).trim().toLowerCase();
+        if (Array.isArray(workouts) && workouts.length > 0) {
+          const targetId = String(id).trim().toLowerCase();
 
-            const found = workouts.find((w) => {
-              const wId = String(w.id ?? w._id ?? "").trim().toLowerCase();
-              const wSlug = String(w.slug || w.name || "")
-                .trim()
-                .toLowerCase()
-                .replace(/\s+/g, "-");
-              return wId === targetId || wSlug === targetId;
-            });
+          const found = workouts.find((w) => {
+            const wId = String(w.id ?? w._id ?? "").trim().toLowerCase();
+            const wSlug = String(w.slug || w.name || "")
+              .trim()
+              .toLowerCase()
+              .replace(/\s+/g, "-");
+            return wId === targetId || wSlug === targetId;
+          });
 
-            setWorkout(found || null);
-          } else {
-            setWorkout(null);
-          }
+          setWorkout(found || null);
+        } else {
+          setWorkout(null);
         }
       } catch (err) {
         console.error("Error fetching detail:", err);
-        if (isMounted) setWorkout(null);
+        setWorkout(null);
       } finally {
-        if (isMounted) setLoading(false);
+        setLoading(false);
       }
     }
 
     fetchWorkout();
-
-    return () => {
-      isMounted = false;
-    };
   }, [id]);
 
   if (loading) {
